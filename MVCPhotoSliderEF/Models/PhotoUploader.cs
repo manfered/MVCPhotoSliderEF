@@ -6,10 +6,9 @@ using System.Web;
 
 namespace MVCPhotoSliderEF.Models
 {
-    public class PhotoUploader
+    public class PhotoUploader : PhotoFileManager
     {
         private IEnumerable<HttpPostedFileBase> files;
-        private string StorageDirectory = "images";
         public PhotoUploader(IEnumerable<HttpPostedFileBase> _files)
         {
             files = _files;

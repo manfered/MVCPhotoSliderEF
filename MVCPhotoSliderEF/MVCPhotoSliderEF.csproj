@@ -164,6 +164,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\PhotoDeleter.cs" />
+    <Compile Include="Models\PhotoFileManager.cs" />
     <Compile Include="Models\PhotoUploader.cs" />
     <Compile Include="Models\Slide.cs" />
     <Compile Include="Models\UploadResult.cs" />

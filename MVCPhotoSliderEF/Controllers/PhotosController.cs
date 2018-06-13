@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using MVCPhotoSliderEF.DataContext;
 using MVCPhotoSliderEF.Models;
+using System.IO;
 
 namespace MVCPhotoSliderEF.Controllers
 {
@@ -147,6 +148,24 @@ namespace MVCPhotoSliderEF.Controllers
             return SuccessJSON(uploadResult);
         }
 
+        public ActionResult AsyncDelete()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AsyncDelete(string deletFileName)
+        {
+            PhotoDeleter photoDeleter = new PhotoDeleter();
+
+            return Json(new { Data = photoDeleter.Delete(deletFileName), deleteFileName = deletFileName }, JsonRequestBehavior.AllowGet);
+            //return new JsonResult { Data = "Successfully " + count + " file(s) uploaded" };
+        }
+
+
+
         private JsonResult SuccessJSON(UploadResult uploadResult)
         {
             return Json(new
@@ -154,6 +173,7 @@ namespace MVCPhotoSliderEF.Controllers
                 status = "Success",
                 Data = uploadResult.ResultString,
                 src = uploadResult.StorageDirectory + "/" + uploadResult.UploadedFilename,
+                uploadedFileName = uploadResult.UploadedFilename
             }, JsonRequestBehavior.AllowGet);
         }
 

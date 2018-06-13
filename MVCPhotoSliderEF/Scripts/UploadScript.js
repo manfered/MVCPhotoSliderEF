@@ -59,7 +59,7 @@
     ///
     ///
 
-    var uploadType = MVCFileUploadAsyncUploadTypes.Mulitiple;
+    var uploadType = MVCFileUploadAsyncUploadTypes.Single;
     var uploadAcceptFileFormats = MVCFileUploadAsyncAcceptFileFormats.Image;
     var uploadPreview = MVCFileUploadAsyncPreview.ImageWithDelete;
     var uploadProgressBar = MVCFileUploadAsyncProgressBar.Show;
@@ -206,6 +206,10 @@
 
     function deleteResult(container, rowID) {
         $('#resultRow-' + rowID).hide();
+        if (uploadType == MVCFileUploadAsyncUploadTypes.Single) {
+            uploadFormBox.show();
+            SRC.val('');
+        }
     }
 
     //capturing the event of selecting file by user in browse window
@@ -264,7 +268,7 @@
                     }
 
                     if (obj.status == "Success") {
-                        addResult(uploadResultBox, obj.src);
+                        addResult(uploadResultBox, obj.src, obj.uploadedFileName);
                         SRC.val(obj.src);
                     }
                     
