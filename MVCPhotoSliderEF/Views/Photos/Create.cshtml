@@ -1,0 +1,99 @@
+﻿@model MVCPhotoSliderEF.Models.Photo
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+
+
+
+@using (Ajax.BeginForm("AsyncDelete", "Delete", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row" id="uploadResultBox">
+        <input type="hidden" name="deletFileName" id="deletFileName" />
+    </div>
+}
+
+@using (Ajax.BeginForm("AsyncUpload", "Upload", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row" id="uploadFormBox">
+        <div class="col-xs-12">
+            <label for="fileUploadInput" class="custom-file-upload">
+                Upload File
+            </label>
+            <input id="fileUploadInput" type="file" name="files" />
+        </div>
+    </div>
+
+
+    <div class="form-group" id="uploadProgressBox">
+        <div class="progress col-md-2" id="uploadProgressBar">
+            <div class="progress-bar">0%</div>
+        </div>
+        <div id="fileUploadStatus"></div>
+    </div>
+
+
+}
+
+
+
+
+
+
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Photo</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.PhotoID, "PhotoID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("PhotoID", null, htmlAttributes: new { @class = "form-control linkDisabled" })
+                @Html.ValidationMessageFor(model => model.PhotoID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SRC, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SRC, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SRC, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", "Slides")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <link href="~/Content/AsyncUploadStyle.css" rel="stylesheet" />
+    <link href="~/Content/CustomInputFile.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery.form.js"></script>
+    <script src="~/Scripts/UploadScript.js"></script>
+}
