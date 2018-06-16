@@ -7,6 +7,54 @@
 <h2>Edit</h2>
 
 
+
+
+@using (Ajax.BeginForm("AsyncDelete", "Delete", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+
+
+
+    <div class="is-table-row" id="uploadResultBox">
+        <div class="col-xs-10 upload-preview-div align-middle justify-content-center text-center">
+            <img id="imgUploadedResult" class="img-result" src="../../../images/@Model.SRC">
+        </div>
+        <div id="uploadResultBoxDeleteSection" class="col-xs-2 delete-Button-div align-middle justify-content-center text-center">
+            <input type="submit" value="Delete File" class="btn btn-danger">
+            <input type="hidden" value="@Model.SRC" id="deleteFileName" name="deleteFileName" />
+        </div>
+    </div>
+
+}
+
+@using (Ajax.BeginForm("AsyncUpload", "Upload", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row" id="uploadFormBox">
+        <div class="col-xs-12">
+            <label for="fileUploadInput" class="custom-file-upload">
+                Upload File
+            </label>
+            <input id="fileUploadInput" type="file" name="files" />
+        </div>
+    </div>
+
+
+    <div class="form-group" id="uploadProgressBox">
+        <div class="progress col-md-2" id="uploadProgressBar">
+            <div class="progress-bar">0%</div>
+        </div>
+    </div>
+
+
+}
+
+
+
+
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -39,4 +87,15 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <link href="~/Content/AsyncUploadStyle.css" rel="stylesheet" />
+    <link href="~/Content/CustomInputFile.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery.form.js"></script>
+
+    <script>
+        //defining the CRUDMODE of the javascript file by using the global javascript variable
+        var imageFilingCrudMode = "Edit";
+    </script>
+    <script src="~/Scripts/UploadScript.js"></script>
 }

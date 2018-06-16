@@ -8,15 +8,23 @@
 
 
 
-
-
 @using (Ajax.BeginForm("AsyncDelete", "Delete", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="row" id="uploadResultBox">
-        <input type="hidden" name="deletFileName" id="deletFileName" />
+   
+
+
+    <div class="is-table-row" id="uploadResultBox">
+        <div class="col-xs-10 upload-preview-div align-middle justify-content-center text-center">
+            <img id="imgUploadedResult" class="img-result">
+        </div>
+        <div id="uploadResultBoxDeleteSection" class="col-xs-2 delete-Button-div align-middle justify-content-center text-center">
+            <input type="submit" value="Delete File" class="btn btn-danger">
+            <input type="hidden" value="" id="deleteFileName" name="deleteFileName" />
+        </div>
     </div>
+
 }
 
 @using (Ajax.BeginForm("AsyncUpload", "Upload", new AjaxOptions() { HttpMethod = "POST" }, new { enctype = "multipart/form-data" }))
@@ -37,7 +45,6 @@
         <div class="progress col-md-2" id="uploadProgressBar">
             <div class="progress-bar">0%</div>
         </div>
-        <div id="fileUploadStatus"></div>
     </div>
 
 
@@ -63,7 +70,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.PhotoID, "PhotoID", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("PhotoID", null, htmlAttributes: new { @class = "form-control linkDisabled" })
+                @Html.EditorFor(model => model.PhotoID, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = ViewBag.PhotoID } })
                 @Html.ValidationMessageFor(model => model.PhotoID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -71,7 +78,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.SRC, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.SRC, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.SRC, new { htmlAttributes = new { @class = "form-control" , @readonly = "readonly"} })
                 @Html.ValidationMessageFor(model => model.SRC, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -95,5 +102,11 @@
     <link href="~/Content/CustomInputFile.css" rel="stylesheet" />
 
     <script src="~/Scripts/jquery.form.js"></script>
+    
+    <script>
+        //defining the CRUDMODE of the javascript file by using the global javascript variable
+        var imageFilingCrudMode = "Create";
+    </script>
     <script src="~/Scripts/UploadScript.js"></script>
 }
+

@@ -41,7 +41,8 @@ namespace MVCPhotoSliderEF.Controllers
         // GET: Photos/Create
         public ActionResult Create(int id)
         {
-            ViewBag.PhotoID = new SelectList(db.Slides, "SlideID", "Title", id);
+            //ViewBag.PhotoID = new SelectList(db.Slides, "SlideID", "Title", id);
+            ViewBag.PhotoID = id;
             return View();
         }
 
@@ -114,8 +115,11 @@ namespace MVCPhotoSliderEF.Controllers
         // POST: Photos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id, string deleteFileName)
         {
+            PhotoFileManager manager = new PhotoFileManager();
+            manager.Delete(deleteFileName);
+
             Photo photo = db.Photos.Find(id);
             db.Photos.Remove(photo);
             db.SaveChanges();
@@ -134,18 +138,8 @@ namespace MVCPhotoSliderEF.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AsyncUpload(IEnumerable<HttpPostedFileBase> files)
         {
-            UploadResult uploadResult = new UploadResult();
-            PhotoUploader uploader = new PhotoUploader(files);
-            uploader.Upload(uploadResult);
-
-            if (uploadResult.Result == false)
-            {
-                // if file upload was not successful 
-                // we return a JSON to the controller as a result of failure
-                return FailJSON(uploadResult);
-            }
-
-            return SuccessJSON(uploadResult);
+            PhotoFileManager manager = new PhotoFileManager(files);
+            return manager.Upload();
         }
 
         public ActionResult AsyncDelete()
@@ -156,35 +150,16 @@ namespace MVCPhotoSliderEF.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AsyncDelete(string deletFileName)
+        public ActionResult AsyncDelete(string deleteFileName)
         {
-            PhotoDeleter photoDeleter = new PhotoDeleter();
+            PhotoFileManager manager = new PhotoFileManager();
 
-            return Json(new { Data = photoDeleter.Delete(deletFileName), deleteFileName = deletFileName }, JsonRequestBehavior.AllowGet);
-            //return new JsonResult { Data = "Successfully " + count + " file(s) uploaded" };
+            return manager.Delete(deleteFileName);
         }
 
 
 
-        private JsonResult SuccessJSON(UploadResult uploadResult)
-        {
-            return Json(new
-            {
-                status = "Success",
-                Data = uploadResult.ResultString,
-                src = uploadResult.StorageDirectory + "/" + uploadResult.UploadedFilename,
-                uploadedFileName = uploadResult.UploadedFilename
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        private JsonResult FailJSON(UploadResult uploadResult)
-        {
-            return Json(new
-            {
-                status = "Fail",
-                Data = uploadResult.ResultString
-            }, JsonRequestBehavior.AllowGet);
-        }
+        
 
 
 
